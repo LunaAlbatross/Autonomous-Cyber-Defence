@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IDS/IPS Monitor - Cybersecurity Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="animated-bg"></div>
+    
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="navbar-brand">
+                <div class="brand-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div>
+                    <span class="brand-title">Autonomous Cyber Defence</span>
+                    <span class="brand-subtitle">Real-time IDS/IPS Monitor</span>
+                </div>
+            </div>
+            <div class="navbar-status">
+                <span id="status-indicator" class="status-dot"></span>
+                <span class="status-text">Live Monitoring</span>
+                <span class="update-timer" id="update-timer">30s</span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <section class="stats">
+            <h2><i class="fas fa-chart-bar"></i> Real-time Statistics</h2>
+            <div id="stats-content" class="stats-grid">
+                <div class="stat-card loading"><p>Loading...</p></div>
+            </div>
+        </section>
+
+        <div class="main-grid">
+            <section class="threat-chart">
+                <h2><i class="fas fa-chart-line"></i> Threat Activity Timeline</h2>
+                <div class="card-content">
+                    <canvas id="threat-chart"></canvas>
+                </div>
+            </section>
+
+            <section class="blocked-ips">
+                <h2><i class="fas fa-ban"></i> Quarantined IPs</h2>
+                <div class="card-content">
+                    <ul id="blocked-list">
+                        <li class="empty-state">✓ No blocked IPs</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <section class="logs">
+            <h2><i class="fas fa-list"></i> Security Event Log</h2>
+            <div class="card-content">
+                <div class="logs-filter">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="log-filter" placeholder="Search by IP, username, or status...">
+                </div>
+                <table id="logs-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-clock"></i> Timestamp</th>
+                            <th><i class="fas fa-user"></i> Username</th>
+                            <th><i class="fas fa-globe"></i> IP Address</th>
+                            <th><i class="fas fa-signal"></i> Status</th>
+                            <th><i class="fas fa-tools"></i> Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logs-body">
+                        <tr><td colspan="5" class="empty-state">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <div id="alert-container"></div>
+    <div id="toast-container"></div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
