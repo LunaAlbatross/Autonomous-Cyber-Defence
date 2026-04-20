@@ -4,6 +4,9 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Tech Blog - Secure Login</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -13,169 +16,166 @@
         }
 
         :root {
-            --primary: #6c63ff;
-            --secondary: #ff006e;
-            --success: #00f5a0;
-            --danger: #ff4757;
-            --dark: #0f0f1e;
-            --light: #f5f5f5;
+            --bg-dark: #0a0a0f;
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-primary: #ffffff;
+            --text-muted: #8b8b9e;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradientShift 15s ease infinite;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
 
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        .stars {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
+        /* Glowing Orbs */
+        .ambient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
             z-index: 1;
         }
 
-        .star {
-            position: absolute;
-            width: 2px;
-            height: 2px;
-            background: white;
-            border-radius: 50%;
-            opacity: 0.8;
-            animation: twinkle 5s infinite;
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -10%;
+            left: -10%;
+            animation: float 20s ease-in-out infinite alternate;
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.3; }
-            50% { opacity: 1; }
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: #ff0844;
+            bottom: -5%;
+            right: -5%;
+            animation: float 25s ease-in-out infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 50px); }
         }
 
         .container {
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 450px;
-            margin: 0 20px;
+            max-width: 420px;
+            padding: 0 20px;
         }
 
         .login-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 50px 40px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            animation: slideUp 0.8s ease;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            padding: 45px 35px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            opacity: 0.5;
         }
 
         @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .login-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 35px;
         }
 
         .logo {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            animation: float 3s ease-in-out infinite;
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 242, 254, 0.1);
+            border: 1px solid rgba(0, 242, 254, 0.3);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin: 0 auto 20px;
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            animation: pulse-glow 3s infinite;
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 242, 254, 0.2); }
+            50% { box-shadow: 0 0 40px rgba(0, 242, 254, 0.4); }
         }
 
         .login-header h1 {
-            font-size: 2rem;
-            color: var(--dark);
-            margin-bottom: 10px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
         }
 
         .login-header p {
-            color: #666;
-            font-size: 0.95rem;
-            font-weight: 500;
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
-        .alerts {
-            margin-bottom: 25px;
-        }
+        .alerts { margin-bottom: 20px; }
 
         .alert {
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin-bottom: 10px;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             gap: 10px;
-            animation: slideIn 0.5s ease;
+            font-size: 0.9rem;
+            animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
+            border-left: 3px solid;
+            background: rgba(10, 10, 15, 0.8);
         }
 
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translateX(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+        .alert-success { border-color: #00f5a0; color: #00f5a0; }
+        .alert-danger { border-color: #ff0844; color: #ff0844; }
+
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-1px, 0, 0); }
+            20%, 80% { transform: translate3d(2px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+            40%, 60% { transform: translate3d(4px, 0, 0); }
         }
 
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-danger {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .alert i {
-            font-size: 1.2rem;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         label {
             display: block;
             margin-bottom: 8px;
-            color: var(--dark);
-            font-weight: 600;
-            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .input-wrapper {
@@ -187,171 +187,105 @@
         .input-wrapper i {
             position: absolute;
             left: 15px;
-            color: var(--primary);
-            font-size: 1.1rem;
-            z-index: 1;
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: color 0.3s;
         }
 
         input {
             width: 100%;
-            padding: 14px 50px 14px 45px;
-            border: 2px solid #e0e0e0;
+            padding: 14px 15px 14px 45px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
             border-radius: 12px;
-            font-size: 1rem;
+            color: var(--text-primary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
-            background: #fafafa;
         }
 
         input:focus {
             outline: none;
             border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+            background: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 0 3px rgba(0, 242, 254, 0.15);
         }
 
-        input::placeholder {
-            color: #aaa;
+        input:focus + i, .input-wrapper:focus-within i {
+            color: var(--primary);
         }
+
+        input::placeholder { color: rgba(255, 255, 255, 0.3); }
 
         .submit-btn {
             width: 100%;
             padding: 14px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
+            color: #000;
             border: none;
             border-radius: 12px;
+            font-family: 'Inter', sans-serif;
             font-size: 1rem;
             font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: transform 0.3s, box-shadow 0.3s;
             margin-top: 10px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .submit-btn::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .submit-btn:hover::before {
-            width: 300px;
-            height: 300px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .submit-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(108, 99, 255, 0.4);
+            box-shadow: 0 10px 20px rgba(0, 242, 254, 0.3);
         }
 
-        .submit-btn:active {
-            transform: translateY(0);
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0;
-        }
-
-        .divider::before,
-        .divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #e0e0e0;
-        }
-
-        .divider span {
-            padding: 0 10px;
-            color: #999;
-            font-size: 0.9rem;
-        }
+        .submit-btn:active { transform: translateY(0); }
 
         .demo-info {
-            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(255, 0, 110, 0.1));
+            margin-top: 30px;
             padding: 15px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--card-border);
             border-radius: 10px;
-            border-left: 4px solid var(--primary);
-            margin-top: 20px;
-        }
-
-        .demo-info h4 {
-            color: var(--dark);
-            margin-bottom: 10px;
-            font-size: 0.95rem;
-        }
-
-        .demo-info p {
-            color: #666;
             font-size: 0.85rem;
-            margin: 5px 0;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            color: var(--text-muted);
+            text-align: center;
         }
 
         .demo-info code {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.3);
             padding: 2px 6px;
             border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0 5px;
         }
-
+        
         .footer {
+            margin-top: 25px;
             text-align: center;
-            margin-top: 20px;
-            color: #999;
-            font-size: 0.85rem;
-        }
-
-        .security-badge {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.3);
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 6px;
-            color: var(--success);
-            font-weight: 600;
-            margin-top: 10px;
         }
+        .footer i { color: #00f5a0; }
 
-        @media (max-width: 480px) {
-            .login-card {
-                padding: 35px 25px;
-            }
-
-            .login-header h1 {
-                font-size: 1.6rem;
-            }
-
-            .logo {
-                font-size: 2.5rem;
-            }
-
-            input {
-                padding: 12px 45px 12px 40px;
-            }
-        }
     </style>
 </head>
 <body>
-    <div class="stars" id="stars"></div>
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
 
     <div class="container">
         <div class="login-card">
             <div class="login-header">
-                <div class="logo">📝</div>
-                <h1>Tech Blog</h1>
-                <p>Secure Login Portal</p>
+                <div class="logo"><i class="fas fa-fingerprint"></i></div>
+                <h1>Secure Portal</h1>
+                <p>Authenticate to Access Target System</p>
             </div>
 
             <div class="alerts">
@@ -359,7 +293,7 @@
                   {% if messages %}
                     {% for category, message in messages %}
                       <div class="alert alert-{{ category }}">
-                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-circle' }}"></i>
+                        <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' }}"></i>
                         <span>{{ message }}</span>
                       </div>
                     {% endfor %}
@@ -369,79 +303,43 @@
 
             <form method="post" action="/login">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Access ID</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-user"></i>
-                        <input type="text" name="username" id="username" placeholder="Enter your username" required />
+                        <i class="fas fa-user-astronaut"></i>
+                        <input type="text" name="username" id="username" placeholder="Enter username" required />
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Passkey</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" name="password" id="password" placeholder="Enter your password" required />
+                        <i class="fas fa-key"></i>
+                        <input type="password" name="password" id="password" placeholder="Enter password" required />
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">
-                    <i class="fas fa-sign-in-alt"></i> Sign In
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Authenticate <i class="fas fa-arrow-right"></i>
                 </button>
 
-                <div class="divider"><span>Demo Credentials</span></div>
-
                 <div class="demo-info">
-                    <h4>🧪 Test Accounts:</h4>
-                    <p><code>admin</code> / <code>adminpass</code></p>
-                    <p><code>user</code> / <code>userpass</code></p>
-                </div>
-
-                <div class="security-badge">
-                    <i class="fas fa-shield-alt"></i> Enterprise Security
+                    Test Accounts: <code>admin</code> or <code>user</code><br>
+                    (Passwords are suffix "pass")
                 </div>
             </form>
 
             <div class="footer">
-                Protected by Advanced IDS/IPS System
+                <i class="fas fa-shield-alt"></i> Protected by Cyber-Glass WAF
             </div>
         </div>
     </div>
 
     <script>
-        // Generate random stars
-        function createStars() {
-            const starsContainer = document.getElementById('stars');
-            for (let i = 0; i < 50; i++) {
-                const star = document.createElement('div');
-                star.className = 'star';
-                star.style.left = Math.random() * 100 + '%';
-                star.style.top = Math.random() * 100 + '%';
-                star.style.animationDelay = Math.random() * 5 + 's';
-                starsContainer.appendChild(star);
-            }
-        }
-
-        createStars();
-
-        // Form animation on submit
         const form = document.querySelector('form');
-        form.addEventListener('submit', function(e) {
-            const btn = form.querySelector('.submit-btn');
+        form.addEventListener('submit', function() {
+            const btn = document.getElementById('submitBtn');
             btn.style.pointerEvents = 'none';
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-        });
-
-        // Auto-fill animation for demo
-        document.addEventListener('DOMContentLoaded', function() {
-            const inputs = document.querySelectorAll('input');
-            inputs.forEach(input => {
-                input.addEventListener('focus', function() {
-                    this.parentElement.style.transform = 'scale(1.02)';
-                });
-                input.addEventListener('blur', function() {
-                    this.parentElement.style.transform = 'scale(1)';
-                });
-            });
+            btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Verifying...';
         });
     </script>
 </body>

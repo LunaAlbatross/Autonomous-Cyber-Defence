@@ -135,24 +135,58 @@ function updateBlockedIPs() {
         .then(response => response.json())
         .then(data => {
             const list = document.getElementById('blocked-list');
+            const entries = Object.entries(data);
             
-            if (data.length === 0) {
-                list.innerHTML = '<li class="empty-state">✓ No blocked IPs - System secure</li>';
+            if (entries.length === 0) {
+                list.innerHTML = '<li class="empty-state">✓ No Quarantined IPs</li>';
             } else {
-                list.innerHTML = data.map(ip => `
+                list.innerHTML = entries.map(([ip, details]) => {
+                    let blockTime = "Unknown";
+                    if (details.blocked_at) {
+                        blockTime = new Date(details.blocked_at).toLocaleTimeString();
+                    }
+                    return `
                     <li>
-                        <span><i class="fas fa-ban"></i> ${ip}</span>
-                        <span style="font-size: 0.85rem; color: #666;">Blocked</span>
-                    </li>
-                `).join('');
+                        <div>
+                            <span><i class="fas fa-ban" style="color:var(--danger)"></i> ${ip}</span>
+                            <div class="text-danger" style="font-size: 0.8rem; margin-top: 5px;">${details.reason}</div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 5px;">${blockTime}</div>
+                            <button class="btn btn-unblock" onclick="unblockIP('${ip}')">Unblock</button>
+                        </div>
+                    </li>`;
+                }).join('');
                 
-                if (data.length > lastBlockedCount) {
-                    showAlert(`New IP blocked: ${data[data.length - 1]}`, 'danger');
-                    lastBlockedCount = data.length;
+                if (entries.length > lastBlockedCount) {
+                    const newestIP = entries[entries.length - 1][0];
+                    showAlert(`Threat Blocked: ${newestIP}`, 'danger');
+                    lastBlockedCount = entries.length;
                 }
             }
         })
         .catch(error => console.error('Error fetching blocked IPs:', error));
+}
+
+function unblockIP(ip) {
+    fetch('/api/unblock-ip', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ip: ip })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.unblocked) {
+            showAlert(`✅ IP ${ip} has been UNBLOCKED manually!`, 'success');
+        } else {
+            showAlert(`⚠️ IP ${ip} could not be unblocked`, 'warning');
+        }
+        updateData();
+    })
+    .catch(error => {
+        console.error('Error unblocking IP:', error);
+        showAlert('Error unblocking IP', 'danger');
+    });
 }
 
 function updateLogs() {
